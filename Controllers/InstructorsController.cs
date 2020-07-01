@@ -52,41 +52,13 @@ namespace ContosoUniversity.Controllers
                 viewModel.Enrollments = selectedCourse.Enrollments;
             }
 
-            return View(viewModel);
-        }
-
-        public async Task<IActionResult> _InstructorCourse(int? id, int? courseID)
-        {
-            var viewModel = new InstructorIndexData();
-            viewModel.Instructors = await _context.Instructors
-                  .Include(i => i.OfficeAssignment)
-                  .Include(i => i.CourseAssignments)
-                    .ThenInclude(i => i.Course)
-                        .ThenInclude(i => i.Department)
-                  .OrderBy(i => i.LastName)
-                  .ToListAsync();
-
-            if (id != null)
+            var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (isAjax) {
+                return PartialView("_InstructorCourse", viewModel);
+            } else
             {
-                ViewData["InstructorID"] = id.Value;
-                Instructor instructor = viewModel.Instructors.Where(
-                    i => i.ID == id.Value).Single();
-                viewModel.Courses = instructor.CourseAssignments.Select(s => s.Course);
+                return View(viewModel);
             }
-
-            if (courseID != null)
-            {
-                ViewData["CourseID"] = courseID.Value;
-                var selectedCourse = viewModel.Courses.Where(x => x.CourseID == courseID).Single();
-                await _context.Entry(selectedCourse).Collection(x => x.Enrollments).LoadAsync();
-                foreach (Enrollment enrollment in selectedCourse.Enrollments)
-                {
-                    await _context.Entry(enrollment).Reference(x => x.Student).LoadAsync();
-                }
-                viewModel.Enrollments = selectedCourse.Enrollments;
-            }
-
-            return View(viewModel);
         }
 
         // GET: Instructors/Details/5
