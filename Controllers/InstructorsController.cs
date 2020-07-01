@@ -20,7 +20,7 @@ namespace ContosoUniversity.Controllers
             _context = context;
         }
 
-        // GET: Instructors
+        // GET: Instructors; allows Ajax also
         public async Task<IActionResult> Index(int? id, int? courseID)
         {
             var viewModel = new InstructorIndexData();
