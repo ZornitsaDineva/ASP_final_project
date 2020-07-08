@@ -7,7 +7,7 @@ namespace ContosoUniversity.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "FirstMidName",
+                name: "FirstName",
                 table: "Student",
                 newName: "FirstName");
         }
@@ -17,7 +17,7 @@ namespace ContosoUniversity.Migrations
             migrationBuilder.RenameColumn(
                 name: "FirstName",
                 table: "Student",
-                newName: "FirstMidName");
+                newName: "FirstName");
         }
     }
 }

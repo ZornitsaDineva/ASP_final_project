@@ -27,8 +27,9 @@ namespace ContosoUniversity.Controllers
             int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["DateSortParm"] = sortOrder == "date_asc" ? "date_desc" : "date_asc";
+            ViewData["FirstNameSortParm"] = sortOrder == "first_name_asc" ? "first_name_desc" : "first_name_asc";
+            ViewData["LastNameSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder == "last_name_asc" ? "last_name_desc" : "last_name_asc";
 
             if (searchString != null)
             {
@@ -46,14 +47,23 @@ namespace ContosoUniversity.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 students = students.Where(s => s.LastName.Contains(searchString)
-                                       || s.FirstMidName.Contains(searchString));
+                                       || s.FirstName.Contains(searchString));
             }
             switch (sortOrder)
             {
-                case "name_desc":
+                case "first_name_asc":
+                    students = students.OrderBy(s => s.FirstName);
+                    break;
+                case "first_name_desc":
+                    students = students.OrderByDescending(s => s.FirstName);
+                    break;                
+                case "last_name_asc":
+                    students = students.OrderBy(s => s.LastName);
+                    break;                
+                case "last_name_desc":
                     students = students.OrderByDescending(s => s.LastName);
                     break;
-                case "Date":
+                case "date_asc":
                     students = students.OrderBy(s => s.EnrollmentDate);
                     break;
                 case "date_desc":
@@ -97,12 +107,11 @@ namespace ContosoUniversity.Controllers
         }
 
         // POST: Students/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+     
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("EnrollmentDate,FirstMidName,LastName")] Student student)
+            [Bind("EnrollmentDate,FirstName,LastName")] Student student)
         {
             try
             {
@@ -154,7 +163,7 @@ namespace ContosoUniversity.Controllers
             if (await TryUpdateModelAsync<Student>(
                 studentToUpdate,
                 "",
-                s => s.FirstMidName, s => s.LastName, s => s.EnrollmentDate))
+                s => s.FirstName, s => s.LastName, s => s.EnrollmentDate))
             {
                 try
                 {

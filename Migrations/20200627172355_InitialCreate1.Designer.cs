@@ -121,7 +121,7 @@ namespace ContosoUniversity.Migrations
                     b.Property<string>("Discriminator")
                         .IsRequired();
 
-                    b.Property<string>("FirstMidName")
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnName("FirstName")
                         .HasMaxLength(50);

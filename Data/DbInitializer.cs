@@ -10,7 +10,7 @@ namespace ContosoUniversity.Data
     {
         public static void Initialize(SchoolContext context)
         {
-            //context.Database.EnsureCreated();
+            context.Database.EnsureCreated();
 
             // Look for any students.
             if (context.Students.Any())
@@ -20,21 +20,21 @@ namespace ContosoUniversity.Data
 
             var students = new Student[]
             {
-                new Student { FirstMidName = "Мила",   LastName = "Милева",
+                new Student { FirstName = "Мила",   LastName = "Милева",
                     EnrollmentDate = DateTime.Parse("2010-09-01") },
-                new Student { FirstMidName = "Мария", LastName = "Петрова",
+                new Student { FirstName = "Мария", LastName = "Петрова",
                     EnrollmentDate = DateTime.Parse("2012-09-01") },
-                new Student { FirstMidName = "Пенка",   LastName = "Димова",
+                new Student { FirstName = "Пенка",   LastName = "Димова",
                     EnrollmentDate = DateTime.Parse("2013-09-01") },
-                new Student { FirstMidName = "Димитър",    LastName = "Паскалев",
+                new Student { FirstName = "Димитър",    LastName = "Паскалев",
                     EnrollmentDate = DateTime.Parse("2012-09-01") },
-                new Student { FirstMidName = "Жан",      LastName = "Валжан",
+                new Student { FirstName = "Жан",      LastName = "Валжан",
                     EnrollmentDate = DateTime.Parse("2012-09-01") },
-                new Student { FirstMidName = "Ния",    LastName = "Желязкова",
+                new Student { FirstName = "Ния",    LastName = "Желязкова",
                     EnrollmentDate = DateTime.Parse("2011-09-01") },
-                new Student { FirstMidName = "Лаура",    LastName = "Ботева",
+                new Student { FirstName = "Лаура",    LastName = "Ботева",
                     EnrollmentDate = DateTime.Parse("2013-09-01") },
-                new Student { FirstMidName = "Нино",     LastName = "Пиронков",
+                new Student { FirstName = "Нино",     LastName = "Пиронков",
                     EnrollmentDate = DateTime.Parse("2025-09-01") }
             };
 
@@ -46,15 +46,15 @@ namespace ContosoUniversity.Data
 
             var instructors = new Instructor[]
             {
-                new Instructor { FirstMidName = "Александър",     LastName = "Добрев",
+                new Instructor { FirstName = "Александър",     LastName = "Добрев",
                     HireDate = DateTime.Parse("1995-03-11") },
-                new Instructor { FirstMidName = "Симеон",    LastName = "Иванов",
+                new Instructor { FirstName = "Симеон",    LastName = "Иванов",
                     HireDate = DateTime.Parse("2002-07-06") },
-                new Instructor { FirstMidName = "Крум",   LastName = "Славов",
+                new Instructor { FirstName = "Крум",   LastName = "Славов",
                     HireDate = DateTime.Parse("1998-07-01") },
-                new Instructor { FirstMidName = "Ния", LastName = "Златанова",
+                new Instructor { FirstName = "Ния", LastName = "Златанова",
                     HireDate = DateTime.Parse("2001-01-15") },
-                new Instructor { FirstMidName = "Петя",   LastName = "Вълканова",
+                new Instructor { FirstName = "Петя",   LastName = "Вълканова",
                     HireDate = DateTime.Parse("2004-02-12") }
             };
 

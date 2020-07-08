@@ -63,7 +63,7 @@ namespace ContosoUniversity.Migrations
 
                     b.Property<DateTime>("EnrollmentDate");
 
-                    b.Property<string>("FirstMidName");
+                    b.Property<string>("FirstName");
 
                     b.Property<string>("LastName");
 
