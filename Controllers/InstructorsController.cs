@@ -36,8 +36,11 @@ namespace ContosoUniversity.Controllers
             {
                 ViewData["InstructorID"] = id.Value;
                 Instructor instructor = viewModel.Instructors.Where(
-                    i => i.ID == id.Value).Single();
-                viewModel.Courses = instructor.CourseAssignments.Select(s => s.Course);
+                    i => i.ID == id.Value).SingleOrDefault();
+                if (instructor != null)
+                {
+                    viewModel.Courses = instructor.CourseAssignments.Select(s => s.Course);
+                }
             }
 
             if (courseID != null)
@@ -52,7 +55,7 @@ namespace ContosoUniversity.Controllers
                 viewModel.Enrollments = selectedCourse.Enrollments;
             }
 
-            var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            var isAjax = Request != null && Request.Headers["X-Requested-With"] == "XMLHttpRequest";
             if (isAjax) {
                 return PartialView("_InstructorCourse", viewModel);
             } else
