@@ -14,7 +14,7 @@ namespace ContosoUniversity.Controllers
     {
         private readonly SchoolContext _context;
 
-        public DepartmentsController(SchoolContext context)
+        public DepartmentsController(SchoolContext context) 
         {
             _context = context;
         }
@@ -34,12 +34,10 @@ namespace ContosoUniversity.Controllers
                 return NotFound();
             }
 
-            string query = "SELECT * FROM Department WHERE DepartmentID = {0}";
             var department = await _context.Departments
-                .FromSql(query, id)
-                .Include(d => d.Administrator)
+                .Include(c => c.Administrator)
                 .AsNoTracking()
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(m => m.DepartmentID == id);
 
             if (department == null)
             {
@@ -212,7 +210,7 @@ namespace ContosoUniversity.Controllers
         // POST: Departments/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(Department department)
+        public async Task<IActionResult> Delete(int? departmentController, Department department)
         {
             try
             {

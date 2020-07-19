@@ -31,7 +31,7 @@ namespace TestUniversity
         {
             InstructorsController obj = new InstructorsController(_context);
 
-            var actResult = await obj.Index(null, null) as Microsoft.AspNetCore.Mvc.ViewResult;
+            var actResult = await obj.Index(null, null) as ViewResult;
             var model = actResult.Model as InstructorIndexData;
             var instructors = model.Instructors as IEnumerable;
 
@@ -54,7 +54,7 @@ namespace TestUniversity
         {
             InstructorsController obj = new InstructorsController(_context);
 
-            var actResult = await obj.Index(13, null) as Microsoft.AspNetCore.Mvc.ViewResult;
+            var actResult = await obj.Index(13, null) as ViewResult;
             var model = actResult.Model as InstructorIndexData;
             var courses = model.Courses;
 
