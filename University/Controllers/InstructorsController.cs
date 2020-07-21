@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ContosoUniversity.Data;
 using ContosoUniversity.Models;
@@ -170,12 +168,12 @@ namespace ContosoUniversity.Controllers
                     .ThenInclude(i => i.Course)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
-            if (await TryUpdateModelAsync<Instructor>(
+            if (await TryUpdateModelAsync(
                 instructorToUpdate,
                 "",
                 i => i.FirstName, i => i.LastName, i => i.HireDate, i => i.OfficeAssignment))
             {
-                if (String.IsNullOrWhiteSpace(instructorToUpdate.OfficeAssignment?.Location))
+                if (string.IsNullOrWhiteSpace(instructorToUpdate.OfficeAssignment?.Location))
                 {
                     instructorToUpdate.OfficeAssignment = null;
                 }
