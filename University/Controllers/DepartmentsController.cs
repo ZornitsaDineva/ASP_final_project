@@ -55,7 +55,7 @@ namespace ContosoUniversity.Controllers
 
         // POST: Departments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DepartmentID,Name,Budget,StartDate,InstructorID,RowVersion")] Department department)
@@ -93,7 +93,7 @@ namespace ContosoUniversity.Controllers
 
         // POST: Departments/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int? id, byte[] rowVersion)
@@ -117,7 +117,7 @@ namespace ContosoUniversity.Controllers
 
             _context.Entry(departmentToUpdate).Property("RowVersion").OriginalValue = rowVersion;
 
-            if (await TryUpdateModelAsync<Department>(
+            if (await TryUpdateModelAsync(
                 departmentToUpdate,
                 "",
                 s => s.Name, s => s.StartDate, s => s.Budget, s => s.InstructorID))
@@ -164,7 +164,7 @@ namespace ContosoUniversity.Controllers
                                 + "edit operation was canceled and the current values in the database "
                                 + "have been displayed. If you still want to edit this record, click "
                                 + "the Save button again. Otherwise click the Back to List hyperlink.");
-                        departmentToUpdate.RowVersion = (byte[])databaseValues.RowVersion;
+                        departmentToUpdate.RowVersion = databaseValues.RowVersion;
                         ModelState.Remove("RowVersion");
                     }
                 }
