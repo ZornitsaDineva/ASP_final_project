@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ContosoUniversity.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using ContosoUniversity.Services;
 
 namespace ContosoUniversity
 {
@@ -31,8 +33,24 @@ namespace ContosoUniversity
             services.AddDbContext<SchoolContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddDbContext<SchoolContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.Configure<DocumentsDatabaseSettings>(
+                Configuration.GetSection(nameof(DocumentsDatabaseSettings)));
+
+            services.AddSingleton<IDocumentsDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<DocumentsDatabaseSettings>>().Value);
+
+            services.AddSingleton<DocumentService>();
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);   
+
+            services.AddDbContext<DocumentsContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("DocumentsContext")));
         }
+
+      
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
