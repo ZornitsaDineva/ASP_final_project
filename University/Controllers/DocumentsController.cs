@@ -5,34 +5,36 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ContosoUniversity.Data;
 using ContosoUniversity.Models;
+using ContosoUniversity.Services;
+using System.Collections.Generic;
 
 namespace ContosoUniversity.Controllers
 {
     public class DocumentsController : Controller
     {
-        private readonly DocumentsContext _context;
+        private readonly DocumentService _service;
 
-        public DocumentsController(DocumentsContext context)
+        public DocumentsController(DocumentService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: Documents
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Document.ToListAsync());
+            List<Document> documents = _service.Get();
+            return View(documents);
         }
 
         // GET: Documents/Details/5
-        public async Task<IActionResult> Details(string id)
+        public IActionResult Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var document = await _context.Document
-                .FirstOrDefaultAsync(m => m.DocumentID == id);
+            var document = _service.Get(id);
             if (document == null)
             {
                 return NotFound();
@@ -48,30 +50,28 @@ namespace ContosoUniversity.Controllers
         }
 
         // POST: Documents/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DocumentID,DocumentTitle,DocumentDescription,DateTime")] Document document)
+        public IActionResult Create([Bind("DocumentID,DocumentTitle,DocumentDescription,DateTime")] Document document)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(document);
-                await _context.SaveChangesAsync();
+                _service.Create(document);
                 return RedirectToAction(nameof(Index));
             }
             return View(document);
         }
 
         // GET: Documents/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public IActionResult Edit(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var document = await _context.Document.FindAsync(id);
+            var document = _service.Get(id);
             if (document == null)
             {
                 return NotFound();
@@ -80,11 +80,10 @@ namespace ContosoUniversity.Controllers
         }
 
         // POST: Documents/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+     
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("DocumentID,DocumentTitle,DocumentDescription,DateTime")] Document document)
+        public IActionResult Edit(string id, [Bind("DocumentID,DocumentTitle,DocumentDescription,DateTime")] Document document)
         {
             if (id != document.DocumentID)
             {
@@ -95,8 +94,7 @@ namespace ContosoUniversity.Controllers
             {
                 try
                 {
-                    _context.Update(document);
-                    await _context.SaveChangesAsync();
+                    _service.Update(id, document);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -115,15 +113,15 @@ namespace ContosoUniversity.Controllers
         }
 
         // GET: Documents/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public IActionResult Delete(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var document = await _context.Document
-                .FirstOrDefaultAsync(m => m.DocumentID == id);
+            var document = _service.Get(id);
+
             if (document == null)
             {
                 return NotFound();
@@ -135,17 +133,22 @@ namespace ContosoUniversity.Controllers
         // POST: Documents/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public IActionResult DeleteConfirmed(string id)
         {
-            var document = await _context.Document.FindAsync(id);
-            _context.Document.Remove(document);
-            await _context.SaveChangesAsync();
+            var document = _service.Get(id);
+
+            if (document == null)
+            {
+                return NotFound();
+            }
+
+            _service.Remove(id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool DocumentExists(string id)
         {
-            return _context.Document.Any(e => e.DocumentID == id);
+            return _service.Get(id) != null;
         }
     }
 }
