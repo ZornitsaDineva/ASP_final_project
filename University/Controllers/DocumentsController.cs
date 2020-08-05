@@ -7,6 +7,8 @@ using ContosoUniversity.Data;
 using ContosoUniversity.Models;
 using ContosoUniversity.Services;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace ContosoUniversity.Controllers
 {
@@ -53,11 +55,20 @@ namespace ContosoUniversity.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("DocumentID,DocumentTitle,DocumentDescription,DateTime")] Document document)
+        public IActionResult Create([Bind("DocumentID,DocumentTitle,DocumentDescription,DateTime,FormFile")] Document document)
         {
             if (ModelState.IsValid)
             {
+                IFormFile formFile = document.FormFile;
+  
+                using (var ms = new MemoryStream())
+                {
+                    formFile.CopyTo(ms);
+                    document.Content = ms.ToArray();
+                }
+
                 _service.Create(document);
+
                 return RedirectToAction(nameof(Index));
             }
             return View(document);
