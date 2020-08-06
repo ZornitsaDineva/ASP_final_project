@@ -9,6 +9,8 @@ using ContosoUniversity.Services;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Microsoft.AspNetCore.Builder.Internal;
+using System.Reflection;
 
 namespace ContosoUniversity.Controllers
 {
@@ -43,6 +45,24 @@ namespace ContosoUniversity.Controllers
             }
 
             return View(document);
+        }
+
+        // GET: Documents/Download/5
+        public IActionResult Download(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var document = _service.Get(id);
+            if (document == null)
+            {
+                return NotFound();
+            }
+
+            return File(document.Content, "application/pdf", document.DocumentTitle+".pdf");
+
         }
 
         // GET: Documents/Create
