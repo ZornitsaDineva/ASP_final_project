@@ -61,7 +61,7 @@ namespace ContosoUniversity.Controllers
                 return NotFound();
             }
 
-            return File(document.Content, "application/pdf", document.DocumentTitle+".pdf");
+            return File(document.Content, document.ContentType, document.FileName);
 
         }
 
@@ -85,6 +85,9 @@ namespace ContosoUniversity.Controllers
                 {
                     formFile.CopyTo(ms);
                     document.Content = ms.ToArray();
+                    document.ContentType = formFile.ContentType;
+                    document.FileName = formFile.FileName;
+
                 }
 
                 _service.Create(document);
