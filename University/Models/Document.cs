@@ -28,7 +28,6 @@ namespace ContosoUniversity.Models
         public byte[] Content { get; set; }
 
         [BsonIgnore]
-        [Required]
         [Display(Name = "File")]
         public IFormFile FormFile { get; set; }
 

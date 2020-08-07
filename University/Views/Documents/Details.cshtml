@@ -32,9 +32,11 @@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.DocumentID">Edit</a> |
-    <a asp-action="Index">Back to List</a> | 
-    <a asp-action="Download" asp-route-id="@Model.DocumentID">Download</a> 
+    <a asp-action="Index">Back to List</a> |
+    <a asp-action="Download" asp-route-id="@Model.DocumentID">Download</a>
 </div>
-<iframe src="mongodb://localhost:27017/documents.docs/FileName", height="400" width="1200">   
+
+<iframe src="/Documents/Download/@Model.DocumentID" width="1200" height="500">
 </iframe>
+
 

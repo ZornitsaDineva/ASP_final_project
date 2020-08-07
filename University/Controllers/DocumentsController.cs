@@ -1,16 +1,11 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ContosoUniversity.Data;
 using ContosoUniversity.Models;
 using ContosoUniversity.Services;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using Microsoft.AspNetCore.Builder.Internal;
-using System.Reflection;
+
 
 namespace ContosoUniversity.Controllers
 {
@@ -43,7 +38,7 @@ namespace ContosoUniversity.Controllers
             {
                 return NotFound();
             }
-
+           
             return View(document);
         }
 
@@ -61,7 +56,7 @@ namespace ContosoUniversity.Controllers
                 return NotFound();
             }
 
-            return File(document.Content, document.ContentType, document.FileName);
+            return File(document.Content, document.ContentType);
 
         }
 
