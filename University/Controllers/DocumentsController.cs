@@ -5,7 +5,10 @@ using ContosoUniversity.Services;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-
+using System;
+using System.Net.Http;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Security.Cryptography;
 
 namespace ContosoUniversity.Controllers
 {
@@ -70,8 +73,9 @@ namespace ContosoUniversity.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("DocumentID,DocumentTitle,DocumentDescription,DateTime,FormFile")] Document document)
+        public async System.Threading.Tasks.Task<IActionResult> Create([Bind("DocumentID,DocumentTitle,DocumentDescription,DateTime,FormFile")] Document document)
         {
+
             if (ModelState.IsValid)
             {
                 IFormFile formFile = document.FormFile;
@@ -85,11 +89,47 @@ namespace ContosoUniversity.Controllers
 
                 }
 
-                _service.Create(document);
+                SHA1Managed sha1 = new SHA1Managed();
+                var hash = sha1.ComputeHash(document.Content);
+                string checksum = Convert.ToBase64String(hash);
+                document.Checksum = checksum;
 
-                return RedirectToAction(nameof(Index));
+                DocumentCheckResponse response = await getDocumentCheckResponseAsync(checksum);
+                if (response.checksumExists)
+                {
+                    ModelState.AddModelError("FormFile", "Document already exists");
+                } else
+                {
+                     _service.Create(document);
+                    return RedirectToAction(nameof(Index));
+                }          
             }
+
             return View(document);
+        }
+
+        private async System.Threading.Tasks.Task<DocumentCheckResponse> getDocumentCheckResponseAsync(string checksum)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:8080/DocumentStore/rest/DocumentService/check_documents/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync("?checksum=" + checksum);
+                    return await response.Content.ReadAsAsync<DocumentCheckResponse>();
+                }
+                catch (HttpRequestException e)
+                {
+                    if (e.Source != null)
+                    {
+                        Console.WriteLine("HttpRequestException source: {0}", e.Source);
+                    }
+                }
+            }
+
+            return null;
         }
 
         // GET: Documents/Edit/5

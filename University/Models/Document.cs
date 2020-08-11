@@ -37,5 +37,6 @@ namespace ContosoUniversity.Models
 
         public string Checksum { get; set; }
     }
+
 }
 
