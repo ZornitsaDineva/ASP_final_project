@@ -9,6 +9,7 @@ using System;
 using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
+using System.Web;
 
 namespace ContosoUniversity.Controllers
 {
@@ -117,7 +118,7 @@ namespace ContosoUniversity.Controllers
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
                 try
                 {
-                    HttpResponseMessage response = await client.GetAsync("?checksum=" + checksum);
+                    HttpResponseMessage response = await client.GetAsync("?checksum=" + HttpUtility.UrlEncode(checksum));
                     return await response.Content.ReadAsAsync<DocumentCheckResponse>();
                 }
                 catch (HttpRequestException e)
