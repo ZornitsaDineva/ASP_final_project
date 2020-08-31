@@ -33,14 +33,20 @@ namespace ContosoUniversity.Areas.Identity
                     {
                         microsoftOptions.ClientId = context.Configuration["Authentication:Microsoft:ClientId"];
                         microsoftOptions.ClientSecret = context.Configuration["Authentication:Microsoft:ClientSecret"];
-                    });
-                    /*.AddGoogle(googleOptions => { })
-                    .AddTwitter(twitterOptions => { })
+                    })
+                    .AddGoogle (o =>
+                    { 
+                        o.ClientId = context.Configuration["Authentication1:Google:ClientId"];
+                        o.ClientSecret = context.Configuration["Authentication1:Google:ClientSecret"];
+
+                    })
+                    
+                /*.AddTwitter(twitterOptions => { })*/
                     .AddFacebook(facebookOptions =>
                     {
-                        facebookOptions.AppId = context.Configuration["Authentication:facebook:appid"];
-                        facebookOptions.AppSecret = context.Configuration["Authentication:facebook:appsecret"];
-                    });*/
+                        facebookOptions.AppId = context.Configuration["Authentication2:facebook:appid"];
+                        facebookOptions.AppSecret = context.Configuration["Authentication2:facebook:appsecret"];
+                    });
             });
         }
        
