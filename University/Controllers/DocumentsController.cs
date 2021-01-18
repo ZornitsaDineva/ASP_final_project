@@ -96,14 +96,24 @@ namespace ContosoUniversity.Controllers
                 document.Checksum = checksum;
 
                 DocumentCheckResponse response = await getDocumentCheckResponseAsync(checksum);
-                if (response.checksumExists)
+                if (response == null)
                 {
-                    ModelState.AddModelError("FormFile", "Document already exists");
-                } else
+                    ModelState.AddModelError("FormFile", "Service down!");
+
+                }
+                else
                 {
-                     _service.Create(document);
-                    return RedirectToAction(nameof(Index));
-                }          
+
+                    if (response.checksumExists)
+                    {
+                        ModelState.AddModelError("FormFile", "Document already exists");
+                    }
+                    else
+                    {
+                        _service.Create(document);
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
             }
 
             return View(document);

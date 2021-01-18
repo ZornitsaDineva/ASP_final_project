@@ -28,5 +28,6 @@ namespace ContosoUniversity.Models
 
         public Instructor Administrator { get; set; }
         public ICollection<Course> Courses { get; set; }
+        public object RowVersion { get; internal set; }
     }
 }
