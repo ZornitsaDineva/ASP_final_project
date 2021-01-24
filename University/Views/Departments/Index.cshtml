@@ -24,7 +24,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Administrator)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.RowVersion)
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -39,9 +41,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.StartDate)
             </td>
-          
+
             <td>
                 @Html.DisplayFor(modelItem => item.Administrator.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RowVersion)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.DepartmentID">Edit</a> |
